@@ -1,27 +1,54 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>&lt;model-viewer&gt; template</title>
-    <meta charset="utf-8">
-    <meta name="description" content="&lt;model-viewer&gt; template">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link type="text/css" href="./style.css" rel="stylesheet"/>
-  </head>
-  <body>
-    <!-- <model-viewer> HTML element -->
-    <model-viewer src="PizdecНовыйГод1337SpaceRoma228.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls poster="poster.webp" shadow-intensity="1">
-      <div class="progress-bar hide" slot="progress-bar">
-          <div class="update-bar"></div>
-      </div>
-      <button slot="ar-button" id="ar-button">
-          View in your space
-      </button>
-      <div id="ar-prompt">
-          <img src="ar_hand_prompt.png">
-      </div>
-    </model-viewer>  
-    <script src="script.js"></script>
-    <!-- Loads <model-viewer> for browsers: -->
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.2.0/model-viewer.min.js"></script>
-  </body>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мой сайт</title>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.7.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip-utils@1.9.0/dist/jszip-utils.min.js"></script>
+</head>
+<body>
+    <h1>Мой сайт</h1>
+
+    <model-viewer id="my-model-viewer" ar ar-modes="webxr scene-viewer quick-look" camera-controls poster="poster.webp" shadow-intensity="1">
+        <div class="progress-bar hide" slot="progress-bar">
+            <div class="update-bar"></div>
+        </div>
+        <button slot="ar-button" id="ar-button">
+            View in your space
+        </button>
+        <div id="ar-prompt">
+            <img src="https://modelviewer.dev/shared-assets/icons/hand.png">
+        </div>
+    </model-viewer>
+
+    <script>
+        // Путь к архиву
+        var archivePath = 'C:\Users\R U D E\Desktop\ROMASELYA\ROMASELYAKKRUTOI.rar';
+
+        // Загрузка архива
+        JSZipUtils.getBinaryContent(archivePath, function(error, data) {
+            if (error) {
+                console.error('Ошибка загрузки архива:', error);
+                return;
+            }
+
+            // Распаковка архива
+            JSZip.loadAsync(data).then(function(zip) {
+                // Извлечение файла ROMASELYAKKRUTOI.glb из архива
+                zip.file('ROMASELYAKKRUTOI.glb').async('arraybuffer').then(function(content) {
+                    // Преобразование содержимого файла в Blob
+                    var blob = new Blob([content]);
+
+                    // Создание объекта URL для загруженного файла
+                    var url = URL.createObjectURL(blob);
+
+                    // Установка пути к файлу в <model-viewer>
+                    var modelViewer = document.getElementById('my-model-viewer');
+                    modelViewer.setAttribute('src', url);
+                });
+            }).catch(function(error) {
+                console.error('Ошибка распаковки архива:', error);
+            });
+        });
+    </script>
+</body>
 </html>
